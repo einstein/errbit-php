@@ -27,6 +27,7 @@ class Errbit_ErrorHandlers {
 	}
 
 	private $_errbit;
+	private $_lastError;
 
 	/**
 	 * Instantiate a new handler for the given client.
@@ -42,7 +43,12 @@ class Errbit_ErrorHandlers {
 	// -- Handlers
 
 	public function onError($code, $message, $file, $line) {
+	    $this->_lastError = get_defined_vars();
+
 		switch ($code) {
+		    case 0: // supressed with @
+		        return false;
+		        break;
 			case E_NOTICE:
 			case E_USER_NOTICE:
 				$exception = new Errbit_Errors_Notice($message, $file, $line, debug_backtrace());
@@ -67,7 +73,7 @@ class Errbit_ErrorHandlers {
 	}
 
 	public function onShutdown() {
-		if (($error = error_get_last()) && $error['type'] & error_reporting()) {
+		if (($error = $this->_lastError) && $error['code'] && $error['type'] & error_reporting()) {
 			$this->_errbit->notify(new Errbit_Errors_Fatal($error['message'], $error['file'], $error['line']));
 		}
 	}

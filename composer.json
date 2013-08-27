@@ -4,6 +4,7 @@
 	"description": "Errbit & Airbrake Client for PHP",
 	"homepage": "https://github.com/flippa/errbit-php",
 	"license": "MIT",
+	"minimum-stability": "dev",
 	"require": {
 		"php": ">=5.3.0",
 		"ext-curl": "*"

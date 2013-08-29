@@ -73,7 +73,7 @@ class Errbit_ErrorHandlers {
 	}
 
 	public function onShutdown() {
-		if (($error = $this->_lastError) && $error['code'] && $error['type'] & error_reporting()) {
+		if (($error = $this->_lastError) && $error['code'] && $error['code'] & error_reporting()) {
 			$this->_errbit->notify(new Errbit_Errors_Fatal($error['message'], $error['file'], $error['line']));
 		}
 	}

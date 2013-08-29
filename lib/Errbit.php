@@ -108,6 +108,7 @@ class Errbit {
 	 *   - cgi_data
 	 *   - params_filters
 	 *   - backtrace_filters
+	 *   - ignore
 	 *
 	 * @param [Array] $config
 	 *   the full configuration
@@ -152,6 +153,10 @@ class Errbit {
 		$this->_checkConfig();
 
 		$config = array_merge($this->_config, $options);
+
+        // foreach ($config['ignore'] as $ignore)
+        //  if ($ignore($exception))
+        //      return $this;
 
 		$sock = fsockopen(
 			$this->_buildTcpScheme($config),
@@ -225,6 +230,12 @@ class Errbit {
 				sprintf('/^%s/', preg_quote($this->_config['project_root'], '/')) => '[PROJECT_ROOT]'
 			);
 		}
+
+        // if (!isset($this->_config['ignore'])) {
+        //  $this->_config['ignore'] = array();
+        // } else if (!is_array($this->_config['ignore'])) {
+        //  $this->_config['ignore'] = array($this->_config['ignore']);
+        // }
 	}
 
 	private function _buildTcpScheme($config) {
